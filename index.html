@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<head>
+    <title>Splitty</title>
+    <link rel="stylesheet" href="css/bulma.css">
+    <link href="css/main.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="manifest" href="img/site.webmanifest">
+    <link rel="mask-icon" href="img/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#1d1e21">
+    <meta name="viewport" content="width=device-width, initial-scale = 1.0, maximum-scale=1.0, user-scalable=no"/>
+</head>
+<body>
+<nav class="navbar is-darkgray" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <p class="navbar-item has-text-weight-bold">
+            <span class="logo-accent">Spli</span>tty
+        </p>
+    </div>
+</nav>
+<main class="container">
+    <div class="maincolumn">
+        <article class="message is-danger" id="error-dialog">
+            <div class="message-body">
+                <strong id="error">Content of error message here.</strong>
+            </div>
+        </article>
+        <div class="card" id="result-section">
+            <header class="card-header">
+                <p class="card-header-title">
+                    Final Amount
+                </p>
+            </header>
+            <div class="card-content">
+                <p class="title is-2" id="result">
+                </p>
+            </div>
+        </div>
+        <form action="/" method="POST" id="calculate">
+            <label class="label">Shit to Split</label>
+            <div class="field has-addons">
+                <p class="control">
+                    <a class="button is-static is-medium">
+                        $
+                    </a>
+                </p>
+                <p class="control">
+                    <input class="input is-medium is-darkgray" type="text" inputmode="decimal" name="total" id="total" placeholder="0.00">
+                </p>
+            </div>
+            <label class="label">Subtotal</label>
+            <div class="field has-addons">
+                <p class="control">
+                    <a class="button is-static is-medium">
+                        $
+                    </a>
+                </p>
+                <p class="control">
+                    <input class="input is-medium is-darkgray" type="text" inputmode="decimal" name="subtotal" id="subtotal" placeholder="0.00">
+                </p>
+            </div>
+            <label class="label">Fees</label>
+            <div class="field has-addons">
+                <p class="control">
+                    <a class="button is-static is-medium">
+                        $
+                    </a>
+                </p>
+                <p class="control">
+                    <input class="input is-medium is-darkgray" type="text" inputmode="decimal" name="fees" id="fees" placeholder="0.00">
+                </p>
+            </div>
+            <label class="label">Tax</label>
+            <div class="field has-addons">
+                <p class="control">
+                    <a class="button is-static is-medium">
+                        $
+                    </a>
+                </p>
+                <p class="control">
+                    <input class="input is-medium is-darkgray" type="text" inputmode="decimal" name="tax" id="tax" placeholder="0.00">
+                </p>
+            </div>
+            <label class="label">Tip</label>
+            <div class="field has-addons">
+                <p class="control">
+                    <a class="button is-static is-medium">
+                        $
+                    </a>
+                </p>
+                <p class="control">
+                    <input class="input is-medium is-darkgray" type="text" inputmode="decimal" name="tip" id="tip" placeholder="0.00">
+                </p>
+            </div>
+        </form>
+        <div class="container">
+            <button class="button is-link mt-5" onclick="calculateResult()">Calculate</button>
+        </div>
+    </div>
+</main>
+<script src="js/main.js" type="application/javascript"></script>
+<script type="application/javascript">
+    function error(message){
+        document.getElementById("error-dialog").style.display = "block";
+        document.getElementById("error").innerHTML = message;
+    }
+    function calculateResult(){
+        let total = +document.getElementById("total").value || 0;
+        let subtotal = +document.getElementById("subtotal").value || 0;
+        let fees = +document.getElementById("fees").value || 0;
+        let tax = +document.getElementById("tax").value || 0;
+        let tip = +document.getElementById("tip").value || 0;
+        if( total === 0 || subtotal === 0 ){
+            error("Split amount and subtotal are required.")
+        }
+        else {
+            let ratio = total / subtotal;
+            let math = (fees * ratio) + (tax * ratio) + (tip * ratio) + total;
+            if (isNaN(math)) {
+                error("Subtotal field is probably blank!")
+            } else {
+                document.getElementById("error-dialog").style.display = "none";
+                document.getElementById("result-section").style.display = "block";
+                document.getElementById("result").innerHTML = "$" + math.toFixed(2);
+            }
+        }
+  }
+</script>
+</body>
